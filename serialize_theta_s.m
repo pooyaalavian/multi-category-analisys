@@ -1,6 +1,8 @@
 function [s_theta] = serialize_theta_s(sp,sg, sl,c)
-global KC F D
+global KC F D FACTORS_BIN
 K = KC(c);
+fb = FACTORS_BIN{c};
+nkf = sum(sum(fb));
 
 
 %   KD x KD     kd x kf         kd x  k
@@ -10,8 +12,8 @@ K = KC(c);
 
 
 s_theta = [
-    sp,             zeros(K*D, K*F),  zeros(K*D, K);
-    zeros(K*F, K*D),             sg,  zeros(K*F, K);
-    zeros(K, K*D),    zeros(K, K*F),             sl;
+    sp,             zeros(K*D, nkf),  zeros(K*D, K);
+    zeros(nkf, K*D),             sg,  zeros(nkf, K);
+    zeros(K, K*D),    zeros(K, nkf),             sl;
 ];
 

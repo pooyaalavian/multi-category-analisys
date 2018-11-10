@@ -1,10 +1,11 @@
 function [theta] = serialize_theta(pi,gamma, lambda,c)
 %SERIALIZE_THETA Summary of this function goes here
 %   Detailed explanation goes here
-global KC F D
+global KC F D FACTORS_BIN
+fb = FACTORS_BIN{c};
 K = KC(c);
 theta_pi = zeros(K*D,1);
-theta_gamma = zeros(K*F,1);
+theta_gamma = [];
 theta_lambda = zeros(K,1);
 
 for i=1:K
@@ -15,7 +16,9 @@ end
 
 for i=1:K
     for j=1:F
-        theta_gamma((i-1)*F+j) = gamma(i,j);
+        if fb(i,j)
+            theta_gamma= [theta_gamma ; gamma(i,j)];
+        end
     end
 end
 

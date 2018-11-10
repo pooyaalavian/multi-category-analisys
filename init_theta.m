@@ -1,7 +1,9 @@
 function [theta, mu_theta, sigma_theta] = init_theta(c)
 
-global C KC F D 
+global C KC F D FACTORS_BIN
 K = KC(c);
+fb = FACTORS_BIN{c};
+nkf = sum(sum(fb));
 
 pi    = zeros(K,D);
 mu_pi = zeros(K,D);
@@ -9,7 +11,7 @@ s_pi  = 10*eye(K*D);
 
 gamma    = zeros(K,F);
 mu_gamma = zeros(K,F);
-s_gamma  = 10*eye(K*F);
+s_gamma  = 10*eye(nkf);
 
 lambda    = zeros(K,K);
 mu_lambda = zeros(K,K);
