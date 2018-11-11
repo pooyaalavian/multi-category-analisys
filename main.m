@@ -8,11 +8,11 @@ F = 2;      % N FACTORS
 D = 1;      % N DEMO variables
 FACTORS_BIN =cell(C,1); % binary variable determining which elements are non-zero
 FACTORS_BIN{1} = [ 1,1; 1,0;];
-FACTORS_BIN{2} = [ 1,1; 1,1;];
+FACTORS_BIN{2} = [ 1,1; 0,1;];
 
 ITEMS = cell(C,1);
-ITEMS{1} = [1,0; 1,1;];
-ITEMS{2} = [1,0; 0,1;];
+ITEMS{1} = [1,0; 0,1;];
+ITEMS{2} = [1,1; 0,1;];
 
 
 %READ FROM FILE 
@@ -32,8 +32,9 @@ end
 
 %%
 tic;
-for rep = 1:2
+for rep = 1:100
     % THETA 1
+    toc;
     disp(['REP ',num2str(rep),':']);
     disp('===> Starting THETA 1...');
     logpdf_theta1 = @(theta)posterior_theta(theta,mu_t1,s_t1,1,nu);
@@ -42,7 +43,7 @@ for rep = 1:2
     [mu_t1, s_t1] = extract_theta(samples,1);
     %t1 = mu_t1;
     t1 = mvnrnd(mu_t1,s_t1)';
-    toc;
+%     toc;
     % THETA 2
     disp('===> Starting THETA 2...');
     logpdf_theta2 = @(theta)posterior_theta(theta,mu_t2,s_t2,2,nu);
@@ -51,17 +52,17 @@ for rep = 1:2
     [mu_t2, s_t2] = extract_theta(samples,2);
     %t2=mu_t2;
     t2 = mvnrnd(mu_t2,s_t2)';
-    toc;
+%     toc;
     % h = 1,...H
     for h=1:H
         disp(['===> Starting NU ',num2str(h),'...']);
         logpdf_nu = @(xxx)posterior_nu(xxx,m_nu{h},s_nu{h},h,t1,t2);
         smp = hmcSampler(logpdf_nu, nu{h}(2:end));
-        samples = drawSamples(smp,'NumSamples',20);
+        samples = drawSamples(smp,'NumSamples',200);
         [m_nu{h}, s_nu{h}] = extract_nu(samples,h);
         %nu{h} = m_nu{h};
         nu{h} = mvnrnd(m_nu{h},s_nu{h})';
-        toc;
+%         toc;
     end
     
 end
