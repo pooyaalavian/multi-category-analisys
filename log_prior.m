@@ -28,3 +28,5 @@ lpdf = -0.5*log(det(sigma_x)) - 0.5*length(x)*log(2*3.1415) - 0.5 * Z;
 grad = (mu_x - x)' / (sigma_x);
 
 grad = grad';
+
+x=56;
